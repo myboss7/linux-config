@@ -1,0 +1,37 @@
+
+#!/bin/ksh
+
+JOB_DIR="/app/obs/script/DEL_LOG_FILE"
+
+
+function find_delete {
+        find ${1} -name "${2}"  -mtime +${3} -delete
+        echo "DELETE FILE ${1}"
+}
+
+
+#NUD_FILE_DEL 보관주기 90일
+NUD_BACK_LOG_DIR="/svc/obs/DATA/LOG/"
+NUD_BACK_SUC_DIR="/svc/obs/DATA/SUC/"
+NUD_BACK_ERR_DIR="/svc/obs/DATA/ERR/"
+
+NUD_BACK_LOG_NAME="OBS001_000_3CC_*"
+
+find_delete ${NUD_BACK_LOG_DIR} ${NUD_BACK_LOG_NAME} 90
+find_delete ${NUD_BACK_SUC_DIR} ${NUD_BACK_LOG_NAME} 90
+find_delete ${NUD_BACK_ERR_DIR} ${NUD_BACK_LOG_NAME} 90
+
+#DAEMON_LOG_DEL 보관주기 90일
+FILE_DAEMON_DIR="/log/DAEMON/MakeFile"
+AC_DAEMON_DIR="/log/DAEMON/AutoCancel/"
+JSON_DAEMON_DIR="/app/obs/DAEMON/JSON/log/"
+STATD_DAEMON_DIR="/log/DAEMON/StatD/"
+
+DAEMON_NAME="*Daemon*"
+JSON_NAME="FileJson*"
+
+
+find_delete ${FILE_DAEMON_DIR} ${DAEMON_NAME} 90
+find_delete ${AC_DAEMON_DIR} ${DAEMON_NAME} 90
+find_delete ${JSON_DAEMON_DIR} ${JSON_NAME} 90
+find_delete ${STATD_DAEMON_DIR} ${DAEMON_NAME} 90
